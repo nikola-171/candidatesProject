@@ -17,7 +17,7 @@ public class StartupConfiguration
     CommandLineRunner getRunner(final CandidateService candidateService)
     {
         return args -> {
-           // InitializeDatabaseData(candidateService);
+            //InitializeDatabaseData(candidateService);
         };
     }
 
@@ -34,6 +34,7 @@ public class StartupConfiguration
                     .contactNumber("065214528")
                     .cityOfLiving("nis")
                     .dateOfBirth(LocalDate.of(1998, 5, 21))
+                    .active(true)
                     .build());
 
             candidateService.addCandidate(CandidateDTO
@@ -44,6 +45,7 @@ public class StartupConfiguration
                     .contactNumber("06552654528")
                     .cityOfLiving("belgrade")
                     .dateOfBirth(LocalDate.of(1997, 7, 21))
+                    .active(true)
                     .build());
 
             candidateService.addCandidate(CandidateDTO
@@ -54,6 +56,7 @@ public class StartupConfiguration
                     .contactNumber("065214528")
                     .cityOfLiving("novi sad")
                     .dateOfBirth(LocalDate.of(1990, 5, 10))
+                    .active(true)
                     .build());
 
             candidateService.addCandidate(CandidateDTO
@@ -64,6 +67,7 @@ public class StartupConfiguration
                     .contactNumber("06234528")
                     .cityOfLiving("nis")
                     .dateOfBirth(LocalDate.of(1992, 2, 13))
+                    .active(true)
                     .build());
 
             candidateService.addCandidate(CandidateDTO
@@ -74,6 +78,7 @@ public class StartupConfiguration
                     .contactNumber("0645896655")
                     .cityOfLiving("nis")
                     .dateOfBirth(LocalDate.of(2000, 4, 24))
+                    .active(true)
                     .build());
         }
 

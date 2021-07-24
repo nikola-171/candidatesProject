@@ -23,4 +23,6 @@ public class CandidateDTO
 
     String cityOfLiving;
 
+    Boolean active;
+
 }

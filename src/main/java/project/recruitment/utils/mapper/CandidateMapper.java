@@ -15,6 +15,7 @@ public class CandidateMapper
                 .cityOfLiving(candidateEntity.getCityOfLiving())
                 .contactNumber(candidateEntity.getContactNumber())
                 .dateOfBirth(candidateEntity.getDateOfBirth())
+                .active(candidateEntity.getActive())
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class CandidateMapper
                 .cityOfLiving(candidateDTO.getCityOfLiving())
                 .contactNumber(candidateDTO.getContactNumber())
                 .dateOfBirth(candidateDTO.getDateOfBirth())
+                .active(candidateDTO.getActive())
                 .build();
     }
 }

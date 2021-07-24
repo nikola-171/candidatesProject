@@ -7,10 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
@@ -26,22 +23,29 @@ public class CandidateEntity
     @GeneratedValue
     Long id;
 
+
+    @Column(nullable = false, length = 50)
     String firstName;
 
+    @Column(nullable = false, length = 50)
     String lastName;
 
+    @Column(nullable = false, length = 50)
     String email;
 
+    @Column(nullable = false, length = 20)
     String contactNumber;
 
+    @Column(nullable = false)
     LocalDate dateOfBirth;
+
+    @Column(nullable = false, length = 50)
+    String cityOfLiving;
 
     @Builder.Default
     Boolean active = true;
 
     @Builder.Default
     ZonedDateTime deleteDate = null;
-
-    String cityOfLiving;
 
 }

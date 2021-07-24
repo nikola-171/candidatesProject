@@ -8,6 +8,7 @@ import project.recruitment.model.entity.CandidateEntity_;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 
 import javax.persistence.criteria.*;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class CandidateSearchSpecification implements Specification<CandidateEnti
         final Path<String> email = root.get(CandidateEntity_.email);
         final Path<String> contactNumber = root.get(CandidateEntity_.contactNumber);
         final Path<String> cityOfLiving = root.get(CandidateEntity_.cityOfLiving);
+        final Path<ZonedDateTime> deleteDate = root.get(CandidateEntity_.deleteDate);
+
 
 
         List<Predicate> predicates = new ArrayList<>();
@@ -53,7 +56,9 @@ public class CandidateSearchSpecification implements Specification<CandidateEnti
             predicates.add(criteriaBuilder.like(cityOfLiving, "%"+_candidateSearchOptions.getCityOfLiving()+"%"));
         }
 
-        return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        predicates.add(criteriaBuilder.isNull(deleteDate));
+
+        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 
     }
 }
