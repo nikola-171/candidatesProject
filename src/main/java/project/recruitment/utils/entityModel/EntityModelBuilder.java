@@ -23,7 +23,6 @@ public class EntityModelBuilder
         }else
         {
             entityModel.add(linkTo(methodOn(CandidatesControllerImpl.class).activateCandidate(id)).withRel("activate-candidate"));
-
         }
 
         return entityModel;

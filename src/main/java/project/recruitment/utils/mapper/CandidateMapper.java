@@ -16,6 +16,7 @@ public class CandidateMapper
                 .contactNumber(candidateEntity.getContactNumber())
                 .dateOfBirth(candidateEntity.getDateOfBirth())
                 .active(candidateEntity.getActive())
+                .tasks(candidateEntity.getTasks())
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class CandidateMapper
                 .contactNumber(candidateDTO.getContactNumber())
                 .dateOfBirth(candidateDTO.getDateOfBirth())
                 .active(candidateDTO.getActive())
+                .tasks(candidateDTO.getTasks())
                 .build();
     }
 }

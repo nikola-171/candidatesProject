@@ -14,6 +14,7 @@ public class ApiError
     {
         CANDIDATE_NOT_FOUND,
         CANDIDATE_ACTIVATION_ERROR,
-        DATA_VALIDATION
+        DATA_VALIDATION,
+        SERVICE_UNAVAILABLE
     }
 }

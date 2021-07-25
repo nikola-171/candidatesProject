@@ -8,12 +8,18 @@ import org.springframework.util.StringUtils;
 import project.recruitment.exception.CandidateActivationException;
 import project.recruitment.exception.ResourceNotFoundException;
 import project.recruitment.model.dto.CandidateDTO;
+import project.recruitment.model.dto.TaskCreateDTO;
+import project.recruitment.model.dto.TaskDTO;
 import project.recruitment.model.entity.CandidateEntity;
+import project.recruitment.model.entity.TaskEntity;
 import project.recruitment.repository.CandidateRepository;
+import project.recruitment.repository.TaskRepository;
 import project.recruitment.repository.specification.CandidateSearchSpecification;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.utils.mapper.CandidateMapper;
+import project.recruitment.utils.mapper.TaskMapper;
 
+import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +30,10 @@ import java.util.stream.Collectors;
 public class CandidateService
 {
     private final CandidateRepository _candidateRepository;
-
+    private final TaskService _taskService;
 
     // get all candidates
+    @Transactional
     public List<CandidateDTO> getCandidates(final CandidateSearchOptions candidateSearchOptions,
                                             final Optional<Integer> currentPage,
                                             final Optional<Integer> itemsPerPage,
@@ -199,4 +206,14 @@ public class CandidateService
         return _candidateRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(generateCandidateNotFoundMessage(id)));
     }
+
+    public void addTask(final TaskCreateDTO taskCreateDTO, final Long candidateId)
+    {
+        final CandidateEntity candidate = getCandidateFromDatabase(candidateId);
+        final TaskEntity taskEntity = TaskMapper.toEntity(taskCreateDTO);
+        taskEntity.setCandidate(candidate);
+
+        _taskService.addTaskToDatabase(taskEntity);
+    }
+
 }

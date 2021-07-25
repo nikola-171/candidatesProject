@@ -2,8 +2,10 @@ package project.recruitment.model.dto;
 
 import lombok.Builder;
 import lombok.Value;
+import project.recruitment.model.entity.TaskEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Value
 @Builder
@@ -25,4 +27,5 @@ public class CandidateDTO
 
     Boolean active;
 
+    List<TaskEntity> tasks;
 }

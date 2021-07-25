@@ -4,29 +4,36 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import project.recruitment.model.dto.CandidateDTO;
+import project.recruitment.model.entity.CandidateEntity;
+import project.recruitment.model.entity.TaskEntity;
+import project.recruitment.repository.CandidateRepository;
+import project.recruitment.repository.TaskRepository;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.service.CandidateService;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Configuration
 public class StartupConfiguration
 {
     @Bean
-    CommandLineRunner getRunner(final CandidateService candidateService)
+    CommandLineRunner getRunner(final CandidateService candidateService, final TaskRepository repository, final CandidateRepository candidateRepository)
     {
         return args -> {
-            //InitializeDatabaseData(candidateService);
+             InitializeDatabaseData(candidateService, repository, candidateRepository);
         };
     }
 
-    private void InitializeDatabaseData(final CandidateService candidateService)
+    private void InitializeDatabaseData(final CandidateService candidateService, final TaskRepository repository, final CandidateRepository candidateRepository)
     {
         // add some data if database is empty
-        if(candidateService.getCandidates(CandidateSearchOptions.builder().build(), Optional.of(0), Optional.of(5), null, null).size() == 0)
+        if(candidateRepository.findAll().size() == 0)
         {
-            candidateService.addCandidate(CandidateDTO
+
+
+            final CandidateEntity c = CandidateEntity
                     .builder()
                     .firstName("pera")
                     .lastName("peric")
@@ -35,9 +42,11 @@ public class StartupConfiguration
                     .cityOfLiving("nis")
                     .dateOfBirth(LocalDate.of(1998, 5, 21))
                     .active(true)
-                    .build());
+                    .build();
 
-            candidateService.addCandidate(CandidateDTO
+            CandidateEntity can1Entity = candidateRepository.save(c);
+
+            /*final CandidateDTO can2 = CandidateDTO
                     .builder()
                     .firstName("mika")
                     .lastName("mikic")
@@ -46,9 +55,11 @@ public class StartupConfiguration
                     .cityOfLiving("belgrade")
                     .dateOfBirth(LocalDate.of(1997, 7, 21))
                     .active(true)
-                    .build());
+                    .build();
 
-            candidateService.addCandidate(CandidateDTO
+            candidateService.addCandidate(can2);*/
+
+            /*final CandidateDTO can3 = CandidateDTO
                     .builder()
                     .firstName("sava")
                     .lastName("savic")
@@ -57,9 +68,11 @@ public class StartupConfiguration
                     .cityOfLiving("novi sad")
                     .dateOfBirth(LocalDate.of(1990, 5, 10))
                     .active(true)
-                    .build());
+                    .build();
 
-            candidateService.addCandidate(CandidateDTO
+            candidateService.addCandidate(can3);*/
+
+            /*final CandidateDTO can4 = CandidateDTO
                     .builder()
                     .firstName("ivko")
                     .lastName("ivkovic")
@@ -68,9 +81,11 @@ public class StartupConfiguration
                     .cityOfLiving("nis")
                     .dateOfBirth(LocalDate.of(1992, 2, 13))
                     .active(true)
-                    .build());
+                    .build();
 
-            candidateService.addCandidate(CandidateDTO
+            candidateService.addCandidate(can4);*/
+
+            /*final CandidateDTO can5 = CandidateDTO
                     .builder()
                     .firstName("marko")
                     .lastName("markovic")
@@ -79,7 +94,26 @@ public class StartupConfiguration
                     .cityOfLiving("nis")
                     .dateOfBirth(LocalDate.of(2000, 4, 24))
                     .active(true)
-                    .build());
+                    .build();
+
+            candidateService.addCandidate(can5);*/
+
+            final TaskEntity task = TaskEntity.builder()
+                    .description("task")
+                    .language("c++")
+                    .name("task 1")
+                    .candidate(c)
+                    .build();
+
+            final TaskEntity task2 = TaskEntity.builder()
+                    .description("task")
+                    .language("c#")
+                    .name("task 2")
+                    .candidate(c)
+                    .build();
+
+            repository.save(task);
+            repository.save(task2);
         }
 
     }

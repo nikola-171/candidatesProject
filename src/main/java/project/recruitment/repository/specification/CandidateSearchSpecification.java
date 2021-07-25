@@ -27,8 +27,6 @@ public class CandidateSearchSpecification implements Specification<CandidateEnti
         final Path<String> cityOfLiving = root.get(CandidateEntity_.cityOfLiving);
         final Path<ZonedDateTime> deleteDate = root.get(CandidateEntity_.deleteDate);
 
-
-
         List<Predicate> predicates = new ArrayList<>();
 
         if(StringUtils.hasText(_candidateSearchOptions.getFirstName()))

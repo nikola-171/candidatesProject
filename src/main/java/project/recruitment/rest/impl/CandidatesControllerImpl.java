@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.recruitment.model.dto.CandidateDTO;
+import project.recruitment.model.dto.TaskCreateDTO;
+import project.recruitment.model.dto.TaskDTO;
 import project.recruitment.rest.CandidatesController;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.service.CandidateService;
@@ -81,7 +83,8 @@ public class CandidatesControllerImpl implements CandidatesController
     }
 
     @Override
-    public EntityModel<CandidateDTO> deactivateCandidate(Long id) {
+    public EntityModel<CandidateDTO> deactivateCandidate(Long id)
+    {
         return EntityModelBuilder.buildCandidateEntityModel(_candidateService.deactivateCandidate(id));
     }
 
@@ -90,5 +93,13 @@ public class CandidatesControllerImpl implements CandidatesController
     {
         CandidateDTO candidate = _candidateService.editCandidate(candidateDTO, id);
         return ResponseEntity.ok(candidate);
+    }
+
+    @Override
+    public ResponseEntity<?> addTask(final TaskCreateDTO taskCreateDTO, final Long id) {
+
+        _candidateService.addTask(taskCreateDTO, id);
+
+        return ResponseEntity.noContent().build();
     }
 }

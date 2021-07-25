@@ -5,8 +5,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.recruitment.model.dto.CandidateDTO;
+import project.recruitment.model.dto.TaskCreateDTO;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/candidates")
@@ -40,5 +40,7 @@ public interface CandidatesController
     @PutMapping("/{id}")
     ResponseEntity<?> editCandidate(@RequestBody final CandidateDTO candidateDTO, @PathVariable final Long id);
 
+    @PostMapping("/{id}/tasks")
+    ResponseEntity<?> addTask(@RequestBody final TaskCreateDTO taskCreateDTO, @PathVariable final Long id);
 
 }
