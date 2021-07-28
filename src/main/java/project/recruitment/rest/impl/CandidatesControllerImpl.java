@@ -102,4 +102,12 @@ public class CandidatesControllerImpl implements CandidatesController
 
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<?> getTaskFromCandidate(final Long candidateId, final Long taskId)
+    {
+        return ResponseEntity.ok(_candidateService.getTaskFromCandidate(candidateId, taskId));
+    }
+
+
 }

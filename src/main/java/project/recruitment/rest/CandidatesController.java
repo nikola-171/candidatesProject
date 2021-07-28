@@ -43,4 +43,6 @@ public interface CandidatesController
     @PostMapping("/{id}/tasks")
     ResponseEntity<?> addTask(@RequestBody final TaskCreateDTO taskCreateDTO, @PathVariable final Long id);
 
+    @GetMapping("/{candidateId}/tasks/{taskId}")
+    ResponseEntity<?> getTaskFromCandidate(@PathVariable final Long candidateId, @PathVariable final Long taskId);
 }

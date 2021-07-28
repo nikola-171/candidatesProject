@@ -15,6 +15,8 @@ public class ApiError
         CANDIDATE_NOT_FOUND,
         CANDIDATE_ACTIVATION_ERROR,
         DATA_VALIDATION,
-        SERVICE_UNAVAILABLE
+        SERVICE_UNAVAILABLE,
+        TASK_NOT_FOUND,
+        RESOURCE_NOT_FOUND
     }
 }

@@ -152,6 +152,25 @@ public class CandidateService
         return CandidateMapper.toDTO(_candidateRepository.save(candidateDatabase));
     }
 
+    // add a new task to database
+    public void addTask(final TaskCreateDTO taskCreateDTO, final Long candidateId)
+    {
+        final CandidateEntity candidate = getCandidateFromDatabase(candidateId);
+        final TaskEntity taskEntity = TaskMapper.toEntity(taskCreateDTO);
+        taskEntity.setCandidate(candidate);
+
+        _taskService.addTaskToDatabase(taskEntity);
+    }
+
+    // get task from a candidate by ID
+    public TaskDTO getTaskFromCandidate(final long CandidateID, final long TaskID)
+    {
+        _candidateRepository.findById(CandidateID)
+                .orElseThrow(() -> new ResourceNotFoundException(generateCandidateNotFoundMessage(CandidateID)));
+
+        return TaskMapper.toDTO(_taskService.getTask(TaskID));
+    }
+
     private String generateCandidateNotFoundMessage(final Long id)
     {
         return String.format("candidate with id '%s' is not found", id);
@@ -207,13 +226,6 @@ public class CandidateService
                 .orElseThrow(() -> new ResourceNotFoundException(generateCandidateNotFoundMessage(id)));
     }
 
-    public void addTask(final TaskCreateDTO taskCreateDTO, final Long candidateId)
-    {
-        final CandidateEntity candidate = getCandidateFromDatabase(candidateId);
-        final TaskEntity taskEntity = TaskMapper.toEntity(taskCreateDTO);
-        taskEntity.setCandidate(candidate);
 
-        _taskService.addTaskToDatabase(taskEntity);
-    }
 
 }

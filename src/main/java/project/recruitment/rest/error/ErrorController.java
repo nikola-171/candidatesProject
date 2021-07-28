@@ -20,7 +20,7 @@ public class ErrorController
     public ApiError handleEmployeeNotFound(final ResourceNotFoundException resourceNotFoundException)
     {
         return ApiError.builder()
-                .code(ApiError.ErrorCode.CANDIDATE_NOT_FOUND)
+                .code(ApiError.ErrorCode.RESOURCE_NOT_FOUND)
                 .message(resourceNotFoundException.getMessage())
                 .build();
     }
