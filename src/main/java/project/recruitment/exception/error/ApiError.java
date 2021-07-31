@@ -17,6 +17,9 @@ public class ApiError
         DATA_VALIDATION,
         SERVICE_UNAVAILABLE,
         TASK_NOT_FOUND,
-        RESOURCE_NOT_FOUND
+        RESOURCE_NOT_FOUND,
+        SOLUTION_ALREADY_EXISTS,
+        TASK_NOT_SUBSCRIBED,
+        TASK_ALREADY_RATED
     }
 }

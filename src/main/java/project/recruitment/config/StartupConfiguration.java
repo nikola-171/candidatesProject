@@ -12,6 +12,7 @@ import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.service.CandidateService;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -103,6 +104,7 @@ public class StartupConfiguration
                     .language("c++")
                     .name("task 1")
                     .candidate(c)
+                    .startDate(ZonedDateTime.now())
                     .build();
 
             final TaskEntity task2 = TaskEntity.builder()
@@ -110,6 +112,7 @@ public class StartupConfiguration
                     .language("c#")
                     .name("task 2")
                     .candidate(c)
+                    .startDate(ZonedDateTime.now())
                     .build();
 
             repository.save(task);

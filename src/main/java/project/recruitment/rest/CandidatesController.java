@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.recruitment.model.dto.CandidateDTO;
 import project.recruitment.model.dto.TaskCreateDTO;
+import project.recruitment.model.dto.TaskDTO;
 
 import java.util.Optional;
 
@@ -45,4 +46,12 @@ public interface CandidatesController
 
     @GetMapping("/{candidateId}/tasks/{taskId}")
     ResponseEntity<?> getTaskFromCandidate(@PathVariable final Long candidateId, @PathVariable final Long taskId);
+
+    @PostMapping("/{candidateId}/tasks/{taskId}/subscribe")
+    ResponseEntity<?> subscribeTaskSolution(@RequestBody final TaskDTO taskSubscribeDTO, @PathVariable final Long candidateId, @PathVariable final Long taskId);
+
+    @PostMapping("/{candidateId}/tasks/{taskId}/review")
+    ResponseEntity<?> reviewTaskSolution(@RequestBody final TaskDTO taskDTO, @PathVariable final Long candidateId, @PathVariable final Long taskId);
+
+
 }

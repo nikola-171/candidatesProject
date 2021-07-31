@@ -13,7 +13,6 @@ import project.recruitment.model.dto.TaskDTO;
 import project.recruitment.model.entity.CandidateEntity;
 import project.recruitment.model.entity.TaskEntity;
 import project.recruitment.repository.CandidateRepository;
-import project.recruitment.repository.TaskRepository;
 import project.recruitment.repository.specification.CandidateSearchSpecification;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.utils.mapper.CandidateMapper;
@@ -168,7 +167,20 @@ public class CandidateService
         _candidateRepository.findById(CandidateID)
                 .orElseThrow(() -> new ResourceNotFoundException(generateCandidateNotFoundMessage(CandidateID)));
 
+
         return TaskMapper.toDTO(_taskService.getTask(TaskID));
+    }
+
+    // subscribe solution to a task
+    public void subscribeSolutionToTask(final Long candidateId, final Long taskId, final TaskDTO taskSubscribeDTO)
+    {
+        _taskService.subscribeSolutionToTask(taskSubscribeDTO, taskId);
+    }
+
+    // review a subscribed solution
+    public void reviewSubscribedSolution(final TaskDTO taskDTO, final Long candidateId, final Long taskId)
+    {
+        _taskService.reviewSubscribedTask(taskDTO, taskId);
     }
 
     private String generateCandidateNotFoundMessage(final Long id)

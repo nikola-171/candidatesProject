@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import project.recruitment.exception.CandidateActivationException;
-import project.recruitment.exception.ResourceNotFoundException;
+import project.recruitment.exception.*;
 import project.recruitment.exception.error.ApiError;
 
 import java.sql.SQLException;
@@ -32,6 +31,36 @@ public class ErrorController
         return ApiError.builder()
                 .code(ApiError.ErrorCode.CANDIDATE_ACTIVATION_ERROR)
                 .message(candidateActivationException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(SolutionAlreadySubscribedException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ApiError handleMultipleSubscribeOnTask(final SolutionAlreadySubscribedException solutionAlreadySubscribedException)
+    {
+        return ApiError.builder()
+                .code(ApiError.ErrorCode.SOLUTION_ALREADY_EXISTS)
+                .message(solutionAlreadySubscribedException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(TaskNotSubscribedException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ApiError handleTaskNotSubscribed(final TaskNotSubscribedException taskNotSubscribedException)
+    {
+        return ApiError.builder()
+                .code(ApiError.ErrorCode.TASK_NOT_SUBSCRIBED)
+                .message(taskNotSubscribedException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(TaskAlreadyRatedException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ApiError handleTaskAlreadyRated(final TaskAlreadyRatedException taskAlreadyRatedException)
+    {
+        return ApiError.builder()
+                .code(ApiError.ErrorCode.TASK_ALREADY_RATED)
+                .message(taskAlreadyRatedException.getMessage())
                 .build();
     }
 

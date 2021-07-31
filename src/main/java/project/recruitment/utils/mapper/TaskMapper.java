@@ -15,6 +15,7 @@ public class TaskMapper
                 .language(entity.getLanguage())
                 .startDate(entity.getStartDate())
                 .finishDate(entity.getFinishDate())
+                .solution(entity.getSolution())
                 .rating(entity.getRating())
                 .id(entity.getId())
                 .build();

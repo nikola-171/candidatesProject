@@ -7,6 +7,7 @@ public class CandidateMapper
 {
     public static CandidateDTO toDTO(final CandidateEntity candidateEntity)
     {
+
         return CandidateDTO.builder()
                 .id(candidateEntity.getId())
                 .firstName(candidateEntity.getFirstName())

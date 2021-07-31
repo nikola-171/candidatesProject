@@ -109,5 +109,19 @@ public class CandidatesControllerImpl implements CandidatesController
         return ResponseEntity.ok(_candidateService.getTaskFromCandidate(candidateId, taskId));
     }
 
+    @Override
+    public ResponseEntity<?> subscribeTaskSolution(final TaskDTO taskSubscribeDTO, final Long candidateId, final Long taskId)
+    {
+        _candidateService.subscribeSolutionToTask(candidateId, taskId, taskSubscribeDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> reviewTaskSolution(final TaskDTO taskDTO, final Long candidateId, final Long taskId) {
+        _candidateService.reviewSubscribedSolution(taskDTO, candidateId, taskId);
+        return ResponseEntity.noContent().build();
+
+    }
+
 
 }

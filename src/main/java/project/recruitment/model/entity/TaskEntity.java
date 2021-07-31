@@ -34,7 +34,6 @@ public class TaskEntity
     @Builder.Default
     String solution = "";
 
-    @UpdateTimestamp
     ZonedDateTime startDate;
 
     @Builder.Default
