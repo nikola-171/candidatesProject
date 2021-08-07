@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import project.recruitment.exception.CandidateActivationException;
 import project.recruitment.exception.ResourceNotFoundException;
-import project.recruitment.model.dto.CandidateDTO;
-import project.recruitment.model.dto.TaskCreateDTO;
-import project.recruitment.model.dto.TaskDTO;
+import project.recruitment.exception.ReviewRangeException;
+import project.recruitment.model.dto.candidate.CandidateDTO;
+import project.recruitment.model.dto.task.TaskCreateDTO;
+import project.recruitment.model.dto.task.TaskDTO;
 import project.recruitment.model.entity.CandidateEntity;
 import project.recruitment.model.entity.TaskEntity;
 import project.recruitment.repository.CandidateRepository;
@@ -116,7 +117,10 @@ public class CandidateService
     // add new candidate
     public CandidateDTO addCandidate(final CandidateDTO candidate)
     {
-        return CandidateMapper.toDTO(_candidateRepository.save(CandidateMapper.toEntity(candidate)));
+        candidate.setActive(true);
+        CandidateEntity candidateEntity = CandidateMapper.toEntity(candidate);
+        CandidateEntity candidateDb = _candidateRepository.save(candidateEntity);
+        return CandidateMapper.toDTO(candidateDb);
     }
 
     // activate candidate
@@ -167,22 +171,38 @@ public class CandidateService
         _candidateRepository.findById(CandidateID)
                 .orElseThrow(() -> new ResourceNotFoundException(generateCandidateNotFoundMessage(CandidateID)));
 
-
         return TaskMapper.toDTO(_taskService.getTask(TaskID));
     }
 
     // subscribe solution to a task
     public void subscribeSolutionToTask(final Long candidateId, final Long taskId, final TaskDTO taskSubscribeDTO)
     {
+        // only if a candidate is active
+        CheckIfCandidateIsActive(candidateId);
         _taskService.subscribeSolutionToTask(taskSubscribeDTO, taskId);
     }
 
     // review a subscribed solution
     public void reviewSubscribedSolution(final TaskDTO taskDTO, final Long candidateId, final Long taskId)
     {
+        final Long rating = taskDTO.getRating();
+        if(rating < 1 || rating > 100)
+        {
+            throw new ReviewRangeException(generateReviewRangeInvalidMessage(rating));
+        }
+        // only if a candidate is active
+        CheckIfCandidateIsActive(candidateId);
         _taskService.reviewSubscribedTask(taskDTO, taskId);
     }
 
+    private void CheckIfCandidateIsActive(final Long candidateId)
+    {
+        CandidateDTO candidate = getCandidate(candidateId);
+        if(!candidate.getActive())
+        {
+            throw new CandidateActivationException(generateOperationFailedDueToCandidateNotActive(candidateId));
+        }
+    }
     private String generateCandidateNotFoundMessage(final Long id)
     {
         return String.format("candidate with id '%s' is not found", id);
@@ -193,6 +213,17 @@ public class CandidateService
         String message = active ? "is already active" : "is already deactivated";
 
         return String.format("candidate with id '%s' %s", id, message);
+    }
+
+    private String generateReviewRangeInvalidMessage(final Long value)
+    {
+        return String.format("rating '%s' needs to be in range [1, 100]", value.toString());
+    }
+
+    private String generateOperationFailedDueToCandidateNotActive(final Long id)
+    {
+        return String.format("operation could not be completed because candidate with id '%s' is not active", id);
+
     }
 
     private void setCandidateActiveStatus(final boolean status, final CandidateEntity candidate)

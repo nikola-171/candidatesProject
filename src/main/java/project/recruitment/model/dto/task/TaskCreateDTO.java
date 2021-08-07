@@ -1,4 +1,4 @@
-package project.recruitment.model.dto;
+package project.recruitment.model.dto.task;
 
 import lombok.Builder;
 import lombok.Value;

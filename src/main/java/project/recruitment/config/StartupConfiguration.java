@@ -3,18 +3,14 @@ package project.recruitment.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import project.recruitment.model.dto.CandidateDTO;
 import project.recruitment.model.entity.CandidateEntity;
 import project.recruitment.model.entity.TaskEntity;
 import project.recruitment.repository.CandidateRepository;
 import project.recruitment.repository.TaskRepository;
-import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.service.CandidateService;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Optional;
 
 @Configuration
 public class StartupConfiguration

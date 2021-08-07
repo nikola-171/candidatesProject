@@ -20,6 +20,7 @@ public class ApiError
         RESOURCE_NOT_FOUND,
         SOLUTION_ALREADY_EXISTS,
         TASK_NOT_SUBSCRIBED,
-        TASK_ALREADY_RATED
+        TASK_ALREADY_RATED,
+        REVIEW_RANGE_INVALID
     }
 }

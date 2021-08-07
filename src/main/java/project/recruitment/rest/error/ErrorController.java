@@ -14,6 +14,16 @@ import java.sql.SQLException;
 @ResponseBody
 public class ErrorController
 {
+    @ExceptionHandler(ReviewRangeException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ApiError handleReviewRangeInvalid(final ReviewRangeException reviewRangeException)
+    {
+        return ApiError.builder()
+                .code(ApiError.ErrorCode.REVIEW_RANGE_INVALID)
+                .message(reviewRangeException.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ApiError handleEmployeeNotFound(final ResourceNotFoundException resourceNotFoundException)

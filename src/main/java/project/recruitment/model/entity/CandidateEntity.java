@@ -52,7 +52,8 @@ public class CandidateEntity
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate")
-    List<TaskEntity> tasks;
+    @Builder.Default
+    List<TaskEntity> tasks = new ArrayList<>();
 
     public void addTask(TaskEntity... tasksEntities)
     {

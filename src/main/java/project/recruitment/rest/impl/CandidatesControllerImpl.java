@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import project.recruitment.model.dto.CandidateDTO;
-import project.recruitment.model.dto.TaskCreateDTO;
-import project.recruitment.model.dto.TaskDTO;
+import project.recruitment.model.dto.candidate.CandidateDTO;
+import project.recruitment.model.dto.task.TaskCreateDTO;
+import project.recruitment.model.dto.task.TaskDTO;
 import project.recruitment.rest.CandidatesController;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.service.CandidateService;
@@ -50,6 +50,7 @@ public class CandidatesControllerImpl implements CandidatesController
                 .stream()
                 .map(EntityModelBuilder::buildCandidateEntityModel)
                 .collect(Collectors.toList());
+
 
         return CollectionModel.of(
                 candidates,
@@ -106,7 +107,8 @@ public class CandidatesControllerImpl implements CandidatesController
     @Override
     public ResponseEntity<?> getTaskFromCandidate(final Long candidateId, final Long taskId)
     {
-        return ResponseEntity.ok(_candidateService.getTaskFromCandidate(candidateId, taskId));
+        CandidateDTO candidate = _candidateService.getCandidate(candidateId);
+        return ResponseEntity.ok(EntityModelBuilder.buildTaskDTOModel(_candidateService.getTaskFromCandidate(candidateId, taskId), candidateId, candidate.getActive()));
     }
 
     @Override

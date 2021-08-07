@@ -4,9 +4,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.recruitment.model.dto.CandidateDTO;
-import project.recruitment.model.dto.TaskCreateDTO;
-import project.recruitment.model.dto.TaskDTO;
+import project.recruitment.model.dto.candidate.CandidateDTO;
+import project.recruitment.model.dto.task.TaskCreateDTO;
+import project.recruitment.model.dto.task.TaskDTO;
 
 import java.util.Optional;
 

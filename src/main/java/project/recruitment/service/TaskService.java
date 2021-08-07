@@ -7,7 +7,7 @@ import project.recruitment.exception.ResourceNotFoundException;
 import project.recruitment.exception.SolutionAlreadySubscribedException;
 import project.recruitment.exception.TaskAlreadyRatedException;
 import project.recruitment.exception.TaskNotSubscribedException;
-import project.recruitment.model.dto.TaskDTO;
+import project.recruitment.model.dto.task.TaskDTO;
 import project.recruitment.model.entity.TaskEntity;
 import project.recruitment.repository.TaskRepository;
 
