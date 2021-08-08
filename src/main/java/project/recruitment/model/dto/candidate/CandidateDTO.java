@@ -22,6 +22,8 @@ public class CandidateDTO
 
     String lastName;
 
+    String username;
+
     String email;
 
     String contactNumber;

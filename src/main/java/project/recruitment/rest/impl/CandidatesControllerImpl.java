@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import project.recruitment.model.dto.candidate.CandidateCreateDTO;
 import project.recruitment.model.dto.candidate.CandidateDTO;
 import project.recruitment.model.dto.task.TaskCreateDTO;
 import project.recruitment.model.dto.task.TaskDTO;
@@ -31,6 +32,7 @@ public class CandidatesControllerImpl implements CandidatesController
     @Override
     public CollectionModel<EntityModel<CandidateDTO>> getCandidates(@RequestParam(value = "firstName", required = false, defaultValue = "") final String firstName,
                                          @RequestParam(value = "lastName", required = false, defaultValue = "") final String lastName,
+                                         @RequestParam(value = "username", required = false, defaultValue = "") final String username,
                                          @RequestParam(value = "email", required = false, defaultValue = "") final String email,
                                          @RequestParam(value = "cityOfLiving", required = false, defaultValue = "") final String cityOfLiving,
                                          @RequestParam(value = "contactNumber", required = false, defaultValue = "") final String contactNumber,
@@ -43,6 +45,7 @@ public class CandidatesControllerImpl implements CandidatesController
         final List<EntityModel<CandidateDTO>> candidates = _candidateService.getCandidates(CandidateSearchOptions.builder()
                 .firstName(firstName)
                 .lastName(lastName)
+                .username(username)
                 .email(email)
                 .contactNumber(contactNumber)
                 .cityOfLiving(cityOfLiving)
@@ -54,7 +57,7 @@ public class CandidatesControllerImpl implements CandidatesController
 
         return CollectionModel.of(
                 candidates,
-                linkTo(methodOn(CandidatesControllerImpl.class).getCandidates(firstName, lastName, email, cityOfLiving, contactNumber, currentPage, itemsPerPage, orderDirection, orderColumn)).withSelfRel()
+                linkTo(methodOn(CandidatesControllerImpl.class).getCandidates(firstName, lastName, username, email, cityOfLiving, contactNumber, currentPage, itemsPerPage, orderDirection, orderColumn)).withSelfRel()
         );
     }
 
@@ -72,7 +75,7 @@ public class CandidatesControllerImpl implements CandidatesController
     }
 
     @Override
-    public EntityModel<CandidateDTO> addCandidate(final CandidateDTO candidateDTO)
+    public EntityModel<CandidateDTO> addCandidate(final CandidateCreateDTO candidateDTO)
     {
          return EntityModelBuilder.buildCandidateEntityModel(_candidateService.addCandidate(candidateDTO));
     }
@@ -90,7 +93,7 @@ public class CandidatesControllerImpl implements CandidatesController
     }
 
     @Override
-    public ResponseEntity<?> editCandidate(final CandidateDTO candidateDTO, @PathVariable final Long id)
+    public ResponseEntity<?> editCandidate(final CandidateCreateDTO candidateDTO, @PathVariable final Long id)
     {
         CandidateDTO candidate = _candidateService.editCandidate(candidateDTO, id);
         return ResponseEntity.ok(candidate);

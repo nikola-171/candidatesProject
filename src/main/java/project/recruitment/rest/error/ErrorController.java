@@ -14,6 +14,26 @@ import java.sql.SQLException;
 @ResponseBody
 public class ErrorController
 {
+    @ExceptionHandler(UsernameTakenException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ApiError handleUsernameAlreadyTaken(final UsernameTakenException usernameTakenException)
+    {
+        return ApiError.builder()
+                .code(ApiError.ErrorCode.USERNAME_ALREADY_TAKEN)
+                .message(usernameTakenException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ApiError handleUserAlreadyExists(final UserAlreadyExistsException userAlreadyExistsException)
+    {
+        return ApiError.builder()
+                .code(ApiError.ErrorCode.USER_ALREADY_EXISTS)
+                .message(userAlreadyExistsException.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(ReviewRangeException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ApiError handleReviewRangeInvalid(final ReviewRangeException reviewRangeException)

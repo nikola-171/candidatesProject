@@ -19,12 +19,18 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "candidates")
+@Table(name = "candidates", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
 public class CandidateEntity
 {
     @Id
     @GeneratedValue
     Long id;
+
+    @Column(nullable = false, length = 50)
+    String username;
+
+    @Column(nullable = false)
+    String password;
 
     @Column(nullable = false, length = 50)
     String firstName;
@@ -54,16 +60,6 @@ public class CandidateEntity
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate")
     @Builder.Default
     List<TaskEntity> tasks = new ArrayList<>();
-
-    public void addTask(TaskEntity... tasksEntities)
-    {
-        for(TaskEntity entity : tasksEntities)
-        {
-            entity.setCandidate(this);
-            tasks.add(entity);
-        }
-    }
-
 
 
 }

@@ -22,6 +22,7 @@ public class CandidateSearchSpecification implements Specification<CandidateEnti
 
         final Path<String> firstName = root.get(CandidateEntity_.firstName);
         final Path<String> lastName = root.get(CandidateEntity_.lastName);
+        final Path<String> userName = root.get(CandidateEntity_.username);
         final Path<String> email = root.get(CandidateEntity_.email);
         final Path<String> contactNumber = root.get(CandidateEntity_.contactNumber);
         final Path<String> cityOfLiving = root.get(CandidateEntity_.cityOfLiving);
@@ -32,6 +33,11 @@ public class CandidateSearchSpecification implements Specification<CandidateEnti
         if(StringUtils.hasText(_candidateSearchOptions.getFirstName()))
         {
             predicates.add(criteriaBuilder.like(firstName, "%"+_candidateSearchOptions.getFirstName()+"%"));
+        }
+
+        if(StringUtils.hasText(_candidateSearchOptions.getUsername()))
+        {
+            predicates.add(criteriaBuilder.like(userName, "%"+_candidateSearchOptions.getUsername()+"%"));
         }
 
         if(StringUtils.hasText(_candidateSearchOptions.getLastName()))

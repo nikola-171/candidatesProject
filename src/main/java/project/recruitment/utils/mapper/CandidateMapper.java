@@ -2,6 +2,9 @@ package project.recruitment.utils.mapper;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import project.recruitment.model.dto.candidate.CandidateCreateDTO;
 import project.recruitment.model.dto.candidate.CandidateDTO;
 import project.recruitment.model.dto.task.TaskDTO;
 import project.recruitment.model.entity.CandidateEntity;
@@ -43,7 +46,7 @@ public class CandidateMapper
         candidateDTO.setEmail(candidateEntity.getEmail());
         candidateDTO.setCityOfLiving(candidateEntity.getCityOfLiving());
         candidateDTO.setContactNumber(candidateEntity.getContactNumber());
-
+        candidateDTO.setUsername(candidateEntity.getUsername());
         candidateDTO.setDateOfBirth(candidateEntity.getDateOfBirth());
         candidateDTO.setActive(candidateEntity.getActive());
 
@@ -58,6 +61,7 @@ public class CandidateMapper
 
     public static CandidateEntity toEntity(final CandidateDTO candidateDTO)
     {
+
         return CandidateEntity.builder()
                 .id(candidateDTO.getId())
                 .firstName(candidateDTO.getFirstName())
@@ -69,4 +73,23 @@ public class CandidateMapper
                 .active(candidateDTO.getActive())
                 .build();
     }
+
+    public static CandidateEntity toEntity(final CandidateCreateDTO candidateDTO)
+    {
+        final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        return CandidateEntity.builder()
+                .firstName(candidateDTO.getFirstName())
+                .lastName(candidateDTO.getLastName())
+                .email(candidateDTO.getEmail())
+                .username(candidateDTO.getUsername())
+                .password(encoder.encode(candidateDTO.getPassword()))
+                .cityOfLiving(candidateDTO.getCityOfLiving())
+                .contactNumber(candidateDTO.getContactNumber())
+                .dateOfBirth(candidateDTO.getDateOfBirth())
+                .active(candidateDTO.getActive())
+                .build();
+    }
+
+
 }

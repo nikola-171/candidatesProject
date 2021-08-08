@@ -1,25 +1,30 @@
-package project.recruitment.searchOptions;
+package project.recruitment.model.dto.candidate;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.time.LocalDate;
 
-@Value
 @Builder
-public class CandidateSearchOptions
+@Value
+public class CandidateCreateDTO
 {
     String firstName;
 
     String lastName;
 
-    String email;
-
     String username;
+
+    String password;
+
+    String email;
 
     String contactNumber;
 
     LocalDate dateOfBirth;
 
     String cityOfLiving;
+
+    Boolean active = true;
 }

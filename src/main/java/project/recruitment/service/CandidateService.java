@@ -8,12 +8,16 @@ import org.springframework.util.StringUtils;
 import project.recruitment.exception.CandidateActivationException;
 import project.recruitment.exception.ResourceNotFoundException;
 import project.recruitment.exception.ReviewRangeException;
+import project.recruitment.exception.UsernameTakenException;
+import project.recruitment.model.dto.candidate.CandidateCreateDTO;
 import project.recruitment.model.dto.candidate.CandidateDTO;
 import project.recruitment.model.dto.task.TaskCreateDTO;
 import project.recruitment.model.dto.task.TaskDTO;
 import project.recruitment.model.entity.CandidateEntity;
 import project.recruitment.model.entity.TaskEntity;
+import project.recruitment.model.entity.UserEntity;
 import project.recruitment.repository.CandidateRepository;
+import project.recruitment.repository.UserRepository;
 import project.recruitment.repository.specification.CandidateSearchSpecification;
 import project.recruitment.searchOptions.CandidateSearchOptions;
 import project.recruitment.utils.mapper.CandidateMapper;
@@ -31,6 +35,7 @@ public class CandidateService
 {
     private final CandidateRepository _candidateRepository;
     private final TaskService _taskService;
+    private final UserRepository _userRepository;
 
     // get all candidates
     @Transactional
@@ -114,10 +119,23 @@ public class CandidateService
         return CandidateMapper.toDTO(candidate);
     }
 
-    // add new candidate
-    public CandidateDTO addCandidate(final CandidateDTO candidate)
+    // get by username
+    public Optional<CandidateEntity> getCandidateByUsername(final String username)
     {
-        candidate.setActive(true);
+        return _candidateRepository.findByUsername(username);
+    }
+
+    // add new candidate
+    public CandidateDTO addCandidate(final CandidateCreateDTO candidate)
+    {
+        String username = candidate.getUsername();
+
+        Optional<UserEntity> user = _userRepository.findByUsername(username);
+
+        if(user.isPresent())
+        {
+            throw new UsernameTakenException(generateUsernameAlreadyTakenMessage(username));
+        }
         CandidateEntity candidateEntity = CandidateMapper.toEntity(candidate);
         CandidateEntity candidateDb = _candidateRepository.save(candidateEntity);
         return CandidateMapper.toDTO(candidateDb);
@@ -144,7 +162,7 @@ public class CandidateService
     }
 
     // edit candidate
-    public CandidateDTO editCandidate(final CandidateDTO candidate, final Long id)
+    public CandidateDTO editCandidate(final CandidateCreateDTO candidate, final Long id)
     {
 
         final CandidateEntity candidateDatabase = _candidateRepository.findById(id)
@@ -226,6 +244,11 @@ public class CandidateService
 
     }
 
+    private String generateUsernameAlreadyTakenMessage(final String username)
+    {
+        return String.format("username '%s' is already taken", username);
+    }
+
     private void setCandidateActiveStatus(final boolean status, final CandidateEntity candidate)
     {
         if(candidate.getActive().equals(status))
@@ -235,31 +258,81 @@ public class CandidateService
         candidate.setActive(status);
     }
 
-    private void editCandidate(final CandidateEntity candidateDatabase, final CandidateDTO candidate)
+    private void editCandidate(final CandidateEntity candidateDatabase, final CandidateCreateDTO candidate)
     {
-        if(!candidateDatabase.getFirstName().equals(candidate.getFirstName()))
+        String firstName = candidate.getFirstName();
+
+        if(firstName != null)
         {
-            candidateDatabase.setFirstName(candidate.getFirstName());
+            firstName = firstName.strip().replaceAll(" +", " ");
         }
-        if(!candidateDatabase.getLastName().equals(candidate.getLastName()))
+        if(StringUtils.hasText(firstName) && !candidateDatabase.getFirstName().equals(firstName))
         {
-            candidateDatabase.setLastName(candidate.getLastName());
+            candidateDatabase.setFirstName(firstName);
         }
-        if(!candidateDatabase.getEmail().equals(candidate.getEmail()))
+
+        String lastName = candidate.getLastName();
+        if(lastName != null)
         {
-            candidateDatabase.setEmail(candidate.getEmail());
+            lastName = lastName.strip().replaceAll(" +", " ");
         }
-        if(!candidateDatabase.getCityOfLiving().equals(candidate.getCityOfLiving()))
+        if(StringUtils.hasText(lastName) && !candidateDatabase.getLastName().equals(lastName))
         {
-            candidateDatabase.setCityOfLiving(candidate.getCityOfLiving());
+            candidateDatabase.setLastName(lastName);
         }
-        if(!candidateDatabase.getContactNumber().equals(candidate.getContactNumber()))
+
+        String email = candidate.getEmail();
+        if(email != null)
         {
-            candidateDatabase.setContactNumber(candidate.getContactNumber());
+            email = email.strip().replaceAll(" +", "");
         }
-        if(!candidateDatabase.getDateOfBirth().equals(candidate.getDateOfBirth()))
+        if(StringUtils.hasText(email) && !candidateDatabase.getEmail().equals(email))
+        {
+            candidateDatabase.setEmail(email);
+        }
+
+        String cityOfLiving = candidate.getCityOfLiving();
+        if(cityOfLiving != null)
+        {
+            cityOfLiving = cityOfLiving.strip().replaceAll(" +", " ");
+        }
+        if(StringUtils.hasText(cityOfLiving) && !candidateDatabase.getCityOfLiving().equals(cityOfLiving))
+        {
+            candidateDatabase.setCityOfLiving(cityOfLiving);
+        }
+
+        String contactNumber = candidate.getCityOfLiving();
+        if(contactNumber != null)
+        {
+            contactNumber = contactNumber.strip().replaceAll(" +", " ");
+        }
+        if(StringUtils.hasText(contactNumber) && !candidateDatabase.getContactNumber().equals(contactNumber))
+        {
+            candidateDatabase.setContactNumber(contactNumber);
+        }
+
+        if(candidate.getDateOfBirth() != null && !candidateDatabase.getDateOfBirth().equals(candidate.getDateOfBirth()))
         {
             candidateDatabase.setDateOfBirth(candidate.getDateOfBirth());
+        }
+
+        String username = candidate.getUsername();
+        if(username != null)
+        {
+            username = username.strip().replaceAll(" +", " ");
+        }
+        if(StringUtils.hasText(username))
+        {
+            Optional<CandidateEntity> candidateExists = getCandidateByUsername(username);
+
+            if(candidateExists.isPresent())
+            {
+                throw new UsernameTakenException(generateUsernameAlreadyTakenMessage(username));
+            }
+            else
+            {
+                candidateDatabase.setUsername(username);
+            }
         }
     }
 
