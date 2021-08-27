@@ -10,6 +10,21 @@ import java.time.LocalDate;
 @Value
 public class CandidateCreateDTO
 {
+    @Override
+    public String toString() {
+        return "CandidateCreateDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", cityOfLiving='" + cityOfLiving + '\'' +
+                ", active=" + active +
+                '}';
+    }
+
     String firstName;
 
     String lastName;

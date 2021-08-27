@@ -16,6 +16,21 @@ import java.time.LocalDate;
 @Relation(collectionRelation = "candidates", itemRelation = "candidate")
 public class CandidateDTO
 {
+    @Override
+    public String toString() {
+        return "CandidateDTO{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", cityOfLiving='" + cityOfLiving + '\'' +
+                ", active=" + active +
+                '}';
+    }
+
     Long id;
 
     String firstName;

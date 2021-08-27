@@ -23,6 +23,8 @@ public class ApiError
         TASK_ALREADY_RATED,
         REVIEW_RANGE_INVALID,
         USER_ALREADY_EXISTS,
-        USERNAME_ALREADY_TAKEN
+        USERNAME_ALREADY_TAKEN,
+        USER_ACTIVATION_ERROR,
+        TOKEN_EXPIRED
     }
 }

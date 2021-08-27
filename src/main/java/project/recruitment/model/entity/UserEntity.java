@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import project.recruitment.model.Role;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -43,6 +44,9 @@ public class UserEntity
     private boolean credentialsNonExpired;
 
     private boolean enabled;
+
+    @Builder.Default
+    ZonedDateTime deleteDate = null;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)

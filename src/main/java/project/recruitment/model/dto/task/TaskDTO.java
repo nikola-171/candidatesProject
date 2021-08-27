@@ -11,6 +11,20 @@ import java.time.ZonedDateTime;
 @Relation(collectionRelation = "tasks", itemRelation = "task")
 public class TaskDTO
 {
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", language='" + language + '\'' +
+                ", solution='" + solution + '\'' +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", rating=" + rating +
+                '}';
+    }
+
     Long id;
 
     String name;

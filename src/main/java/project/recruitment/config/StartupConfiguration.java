@@ -11,20 +11,24 @@ import project.recruitment.model.entity.TaskEntity;
 import project.recruitment.repository.CandidateRepository;
 import project.recruitment.repository.TaskRepository;
 import project.recruitment.service.CandidateService;
+import project.recruitment.service.PasswordResetService;
 import project.recruitment.service.UserService;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.UUID;
 
 @Configuration
 public class StartupConfiguration
 {
     @Bean
-    CommandLineRunner getRunner(final CandidateService candidateService, final TaskRepository repository, final CandidateRepository candidateRepository, final UserService userService)
+    CommandLineRunner getRunner(final CandidateService candidateService, final TaskRepository repository, final CandidateRepository candidateRepository, final UserService userService, final PasswordResetService passwordResetService)
     {
         return args -> {
-            // addUsers(userService, candidateService);
+             //addUsers(userService, candidateService);
+
+            //passwordResetService.addRequest(UUID.randomUUID(), 1L);
         };
     }
 

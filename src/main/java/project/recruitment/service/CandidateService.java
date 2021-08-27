@@ -3,6 +3,7 @@ package project.recruitment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import project.recruitment.exception.CandidateActivationException;
@@ -11,6 +12,7 @@ import project.recruitment.exception.ReviewRangeException;
 import project.recruitment.exception.UsernameTakenException;
 import project.recruitment.model.dto.candidate.CandidateCreateDTO;
 import project.recruitment.model.dto.candidate.CandidateDTO;
+import project.recruitment.model.dto.PasswordResetRequestDTO;
 import project.recruitment.model.dto.task.TaskCreateDTO;
 import project.recruitment.model.dto.task.TaskDTO;
 import project.recruitment.model.entity.CandidateEntity;
@@ -19,7 +21,10 @@ import project.recruitment.model.entity.UserEntity;
 import project.recruitment.repository.CandidateRepository;
 import project.recruitment.repository.UserRepository;
 import project.recruitment.repository.specification.CandidateSearchSpecification;
+import project.recruitment.rest.impl.CandidatesControllerImpl;
 import project.recruitment.searchOptions.CandidateSearchOptions;
+import project.recruitment.utils.EmailSender;
+import project.recruitment.utils.emailTemplate.EmailTemplate;
 import project.recruitment.utils.mapper.CandidateMapper;
 import project.recruitment.utils.mapper.TaskMapper;
 
@@ -27,7 +32,11 @@ import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +45,7 @@ public class CandidateService
     private final CandidateRepository _candidateRepository;
     private final TaskService _taskService;
     private final UserRepository _userRepository;
+    private final PasswordResetService _passwordResetService;
 
     // get all candidates
     @Transactional
@@ -129,10 +139,12 @@ public class CandidateService
     public CandidateDTO addCandidate(final CandidateCreateDTO candidate)
     {
         String username = candidate.getUsername();
-
+        // username must in unique in both user and candidate table
+        // since they both can login
         Optional<UserEntity> user = _userRepository.findByUsername(username);
+        Optional<CandidateEntity> candidateUser = _candidateRepository.findByUsername(username);
 
-        if(user.isPresent())
+        if(user.isPresent() || candidateUser.isPresent())
         {
             throw new UsernameTakenException(generateUsernameAlreadyTakenMessage(username));
         }
@@ -213,6 +225,39 @@ public class CandidateService
         _taskService.reviewSubscribedTask(taskDTO, taskId);
     }
 
+    // reset password request
+    public Boolean resetPassword(final PasswordResetRequestDTO passwordResetRequestDTO) {
+        String username = passwordResetRequestDTO.getUsername();
+        Optional<CandidateEntity> candidate = getCandidateByUsername(username);
+
+        if(candidate.isEmpty())
+        {
+            throw new ResourceNotFoundException(generateCandidateNotFoundMessage(username));
+        }
+        CandidateEntity entity = candidate.get();
+        UUID token = UUID.randomUUID();
+        String url = linkTo(methodOn(CandidatesControllerImpl.class).passwordReset(entity.getId(), token, null)).toString();
+        boolean success = true;
+        try
+        {
+            String template = EmailTemplate.getPasswordResetTemplate();
+            EmailSender.SendEmail(entity.getEmail(), "Password Reset", String.format(template, url, url, url));
+        }catch(Exception e)
+        {
+            success = false;
+        }
+        _passwordResetService.addRequest(token, entity.getId());
+        return success;
+    }
+
+    // reset password
+    public void resetPassword(final Long id, final String newPassword)
+    {
+        CandidateEntity candidate = getCandidateFromDatabase(id);
+        candidate.setPassword(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(newPassword));
+        _candidateRepository.save(candidate);
+    }
+
     private void CheckIfCandidateIsActive(final Long candidateId)
     {
         CandidateDTO candidate = getCandidate(candidateId);
@@ -221,9 +266,15 @@ public class CandidateService
             throw new CandidateActivationException(generateOperationFailedDueToCandidateNotActive(candidateId));
         }
     }
+
     private String generateCandidateNotFoundMessage(final Long id)
     {
         return String.format("candidate with id '%s' is not found", id);
+    }
+
+    private String generateCandidateNotFoundMessage(final String username)
+    {
+        return String.format("candidate with username '%s' is not found", username);
     }
 
     private String generateCandidateActivationMessage(final Long id, final boolean active)
@@ -341,7 +392,5 @@ public class CandidateService
         return _candidateRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(generateCandidateNotFoundMessage(id)));
     }
-
-
 
 }
