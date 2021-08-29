@@ -10,6 +10,7 @@ import project.recruitment.exception.*;
 import project.recruitment.exception.error.ApiError;
 import project.recruitment.exception.UserActivationException;
 import project.recruitment.utils.Logger;
+import project.recruitment.utils.stringResources.ErrorControllerStringResources;
 
 import java.sql.SQLException;
 
@@ -25,7 +26,7 @@ public class ErrorController
     public ApiError handlePasswordResetTokenExpired(final PasswordResetTokenExpiredException passwordResetTokenExpiredException)
     {
         String message = passwordResetTokenExpiredException.getMessage();
-        _logger.logError(String.format("error - handle password reset token expired - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handlePasswordResetTokenExpired, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.TOKEN_EXPIRED)
                 .message(message)
@@ -37,7 +38,7 @@ public class ErrorController
     public ApiError handleUserActivation(final UserActivationException userActivationException)
     {
         String message = userActivationException.getMessage();
-        _logger.logError(String.format("error - handle user activation - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleUserActivation, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.USER_ACTIVATION_ERROR)
                 .message(message)
@@ -49,7 +50,7 @@ public class ErrorController
     public ApiError handleUsernameAlreadyTaken(final UsernameTakenException usernameTakenException)
     {
         String message = usernameTakenException.getMessage();
-        _logger.logError(String.format("error - handle username already taken - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleUsernameAlreadyTaken, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.USERNAME_ALREADY_TAKEN)
                 .message(message)
@@ -61,7 +62,7 @@ public class ErrorController
     public ApiError handleUserAlreadyExists(final UserAlreadyExistsException userAlreadyExistsException)
     {
         String message = userAlreadyExistsException.getMessage();
-        _logger.logError(String.format("error - handle user already exists - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleUserAlreadyExists, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.USER_ALREADY_EXISTS)
                 .message(message)
@@ -73,7 +74,7 @@ public class ErrorController
     public ApiError handleReviewRangeInvalid(final ReviewRangeException reviewRangeException)
     {
         String message = reviewRangeException.getMessage();
-        _logger.logError(String.format("error - handle review range is invalid - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleReviewRangeInvalid, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.REVIEW_RANGE_INVALID)
                 .message(message)
@@ -85,31 +86,20 @@ public class ErrorController
     public ApiError handleEmployeeNotFound(final ResourceNotFoundException resourceNotFoundException)
     {
         String message = resourceNotFoundException.getMessage();
-        _logger.logError(String.format("error - handle employee not found - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleEmployeeNotFound, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.RESOURCE_NOT_FOUND)
                 .message(message)
                 .build();
     }
 
-    @ExceptionHandler(CandidateActivationException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ApiError handleEmployeeNotFound(final CandidateActivationException candidateActivationException)
-    {
-        String message = candidateActivationException.getMessage();
-        _logger.logError(String.format("error - handle employee not found - %s", message));
-        return ApiError.builder()
-                .code(ApiError.ErrorCode.CANDIDATE_ACTIVATION_ERROR)
-                .message(message)
-                .build();
-    }
 
     @ExceptionHandler(SolutionAlreadySubscribedException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ApiError handleMultipleSubscribeOnTask(final SolutionAlreadySubscribedException solutionAlreadySubscribedException)
     {
         String message = solutionAlreadySubscribedException.getMessage();
-        _logger.logError(String.format("error - handle multiple subscriptions on task - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleMultipleSubscribeOnTask, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.SOLUTION_ALREADY_EXISTS)
                 .message(message)
@@ -121,7 +111,7 @@ public class ErrorController
     public ApiError handleTaskNotSubscribed(final TaskNotSubscribedException taskNotSubscribedException)
     {
         String message = taskNotSubscribedException.getMessage();
-        _logger.logError(String.format("error - handle task not subscribed - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleTaskNotSubscribed, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.TASK_NOT_SUBSCRIBED)
                 .message(message)
@@ -133,7 +123,7 @@ public class ErrorController
     public ApiError handleTaskAlreadyRated(final TaskAlreadyRatedException taskAlreadyRatedException)
     {
         String message = taskAlreadyRatedException.getMessage();
-        _logger.logError(String.format("error - handle task already rated - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleTaskAlreadyRated, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.TASK_ALREADY_RATED)
                 .message(message)
@@ -145,10 +135,10 @@ public class ErrorController
     public ApiError handleSqlException(final SQLException sqlException)
     {
         String message = sqlException.getMessage();
-        _logger.logError(String.format("error - handle SQL exception - %s", message));
+        _logger.logError(String.format(ErrorControllerStringResources.handleSqlException, message));
         return ApiError.builder()
                 .code(ApiError.ErrorCode.DATA_VALIDATION)
-                .message("OPERATION COULD NOT BE COMPLETED")
+                .message(ErrorControllerStringResources.handleSqlExceptionMessage)
                 .build();
     }
 
